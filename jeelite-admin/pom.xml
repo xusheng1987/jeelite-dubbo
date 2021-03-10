@@ -20,7 +20,7 @@
 		<commons-fileupload.version>1.3.3</commons-fileupload.version>
 		<commons-email.version>1.5</commons-email.version>
 		<guava.version>21.0</guava.version>
-		<poi.version>3.16</poi.version>
+		<poi.version>5.0.0</poi.version>
 		<swagger.version>2.7.0</swagger.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
