@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%date{HH:mm:ss} [%thread] %-5level %logger %L - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/logs/jeelite.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>/logs/jeelite.%d{yyyy-MM-dd}.log</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%date{HH:mm:ss} [%thread] %-5level %logger %L - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- project default level -->
+	<logger name="com.github.flying.jeelite" level="INFO" />
+	<logger name="org.apache.shiro.session.mgt.AbstractValidatingSessionManager" level="WARN" />
+    <logger name="org.apache.shiro.cache.ehcache.EhCacheManager" level="WARN" />
+    <logger name="org.springframework.scheduling.quartz" level="WARN" />
+    <logger name="org.quartz" level="WARN" />
+    <logger name="druid.sql.Statement" level="DEBUG" />
+
+	<root level="INFO">
+		<appender-ref ref="console" />
+		<appender-ref ref="rollingFile" />
+	</root>
+</configuration>

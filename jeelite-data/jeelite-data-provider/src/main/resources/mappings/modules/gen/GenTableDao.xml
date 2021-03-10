@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.flying.jeelite.modules.gen.dao.GenTableDao">
+
+	<select id="findList" resultType="GenTable">
+		SELECT *
+		FROM gen_table a
+		WHERE a.del_flag = #{param.DEL_FLAG_NORMAL}
+		<if test="param.name != null and param.name != ''">
+			AND a.name = #{param.name}
+		</if>
+		<if test="param.nameLike != null and param.nameLike != ''">
+			AND a.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{param.nameLike}||'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{param.nameLike},'%')</if>
+		</if>
+		<if test="param.comments != null and param.comments != ''">
+			AND a.comments LIKE
+				<if test="dbName == 'oracle'">'%'||#{param.comments}||'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{param.comments},'%')</if>
+		</if>
+		<if test="param.parentTable != null and param.parentTable != ''">
+			AND a.parent_table = #{param.parentTable}
+		</if>
+		<choose>
+			<when test="_parameter.containsKey('page') and page !=null and page.orderBy != null and page.orderBy !=''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.name ASC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="GenTable">
+		SELECT *
+		FROM gen_table a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY a.name ASC
+	</select>
+
+	<select id="findTableList" resultType="GenTable">
+		<if test="dbName == 'oracle'">
+			SELECT
+				t.TABLE_NAME AS name,
+				c.COMMENTS AS comments
+			FROM user_tables t, user_tab_comments c
+			WHERE t.table_name = c.table_name
+			<if test="name != null and name != ''">
+				AND t.TABLE_NAME = upper(#{name})
+			</if>
+			ORDER BY t.TABLE_NAME
+		</if>
+		<if test="dbName == 'mysql'">
+			SELECT t.table_name AS name,t.TABLE_COMMENT AS comments
+			FROM information_schema.`TABLES` t
+			WHERE t.TABLE_SCHEMA = (select database())
+			<if test="name != null and name != ''">
+				AND t.TABLE_NAME = (#{name})
+			</if>
+			ORDER BY t.TABLE_NAME
+		</if>
+	</select>
+
+	<select id="findTablePK" resultType="string">
+		<if test="dbName == 'oracle'">
+			SELECT lower(cu.COLUMN_NAME) AS columnName
+			FROM user_cons_columns cu, user_constraints au
+			WHERE cu.constraint_name = au.constraint_name
+				AND au.constraint_type = 'P'
+				AND au.table_name = upper(#{name})
+		</if>
+		<if test="dbName == 'mysql'">
+			SELECT lower(au.COLUMN_NAME) AS columnName
+			FROM information_schema.`COLUMNS` au
+			WHERE au.TABLE_SCHEMA = (select database())
+			AND au.COLUMN_KEY='PRI' AND au.TABLE_NAME = (#{name})
+		</if>
+	</select>
+
+</mapper>

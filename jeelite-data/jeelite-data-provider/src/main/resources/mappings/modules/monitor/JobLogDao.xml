@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.flying.jeelite.modules.monitor.dao.JobLogDao">
+
+	<sql id="jobLogColumns">
+		a.id,
+		a.job_id,
+		a.bean_name,
+		a.method_name,
+		a.params,
+		a.status,
+		a.error_info,
+		a.cost_time,
+		a.create_date
+	</sql>
+
+	<sql id="jobLogJoins">
+	</sql>
+
+	<select id="get" resultType="JobLog">
+		SELECT
+			<include refid="jobLogColumns"/>
+		FROM sys_job_log a
+		<include refid="jobLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="JobLog">
+		SELECT
+			<include refid="jobLogColumns"/>
+		FROM sys_job_log a
+		<include refid="jobLogJoins"/>
+		<where>
+			
+			<if test="param.beanName != null and param.beanName != ''">
+				AND a.bean_name = #{param.beanName}
+			</if>
+			<if test="param.methodName != null and param.methodName != ''">
+				AND a.method_name = #{param.methodName}
+			</if>
+			<if test="param.status != null and param.status != ''">
+				AND a.status = #{param.status}
+			</if>
+			<if test="param.beginCreateDate != null and param.endCreateDate != null">
+				AND a.create_date BETWEEN #{param.beginCreateDate} AND #{param.endCreateDate}
+			</if>
+		</where>
+		<choose>
+			<when test="_parameter.containsKey('page') and page !=null and page.orderBy != null and page.orderBy !=''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<update id="delete">
+		DELETE FROM sys_job_log
+		WHERE id = #{id}
+	</update>
+
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>service</name>
+	<filePath>src/main/java/${packageName}/${moduleName}/service</filePath>
+	<fileName>${ClassName}Service.java</fileName>
+	<content><![CDATA[
+/**
+ * Copyright &copy; 2017-2018 <a href="https://github.com/xusheng1987/jeelite">jeelite</a> All rights reserved.
+ */
+package ${packageName}.${moduleName}.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.github.flying.jeelite.common.service.BaseService;
+import ${packageName}.${moduleName}.dao.${ClassName}Dao;
+import ${packageName}.${moduleName}.entity.${ClassName};
+
+/**
+ * ${functionName}Service
+ *
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ */
+@Service
+@Transactional(readOnly = true)
+public class ${ClassName}Service extends BaseService<${ClassName}Dao, ${ClassName}> {
+
+}]]>
+	</content>
+</template>
