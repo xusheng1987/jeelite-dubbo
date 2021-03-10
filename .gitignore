@@ -3,3 +3,4 @@ temp/
 .settings
 .classpath
 .project
+*.bat
